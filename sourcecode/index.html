@@ -18,6 +18,8 @@
         <p>Owner address: <span id="owner"></span>
         </p>
         <h2 id="developer"></h2>
+		<label for="name" class="col-lg-2 control-label">Block Number</label>
+		<input id="blockNumber" type="text" disabled><br>
 
         <label for="name" class="col-lg-2 control-label">Developer Name</label>
 		<input id="name" type="text"><br>
@@ -123,6 +125,7 @@ console.log(FirstSolidity.address);
 			   $("#name").val(result[0]);
 			   $("#age").val(result[2]);
 			   $("#position").val(result[1]);
+			   $("#blockNumber").val(FirstSolidity._eth.blockNumber);
 			   
            } else
                 console.log(error);
@@ -142,6 +145,7 @@ console.log(FirstSolidity.address);
 			   $("#name").val(result.args.name);
 			   $("#age").val(result.args.age);
 			   $("#position").val(result.args.position);
+			   $("#blockNumber").val(FirstSolidity._eth.blockNumber);
 		   }
 		   else{
 			   console.log(error);
