@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Coursetro Smart Contract</title>
+    <title>First Solidity</title>
 
     <link rel="stylesheet" type="text/css" href="main.css">
 
@@ -14,18 +14,21 @@
 <body>
     <div class="container">
 
-        <h1>Coursetro Instructor</h1>
+        <h1>Developer</h1>
         <p>Owner address: <span id="owner"></span>
         </p>
-        <h2 id="instructor"></h2>
+        <h2 id="developer"></h2>
 
-        <label for="name" class="col-lg-2 control-label">Instructor Name</label>
-        <input id="name" type="text">
+        <label for="name" class="col-lg-2 control-label">Developer Name</label>
+		<input id="name" type="text"><br>
+		
+		<label for="name" class="col-lg-2 control-label">Developer Position</label>
+        <input id="position" type="text"><br>
 
-        <label for="name" class="col-lg-2 control-label">Instructor Age</label>
-        <input id="age" type="text">
+        <label for="name" class="col-lg-2 control-label">Develoepr Age</label>
+        <input id="age" type="text"><br>
 
-        <button id="button">Update Instructor</button>
+        <button id="button">Update Developer</button>
 
 
     </div>
@@ -85,22 +88,66 @@
 		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "position",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "age",
+				"type": "uint256"
+			}
+		],
+		"name": "Developer",
+		"type": "event"
 	}
 ]);
 
-       var FirstSolidity = FirstSolidityContract.at('0xdf973b16c98e72f87ba6967f38728992715f90de');
-
+       var FirstSolidity = FirstSolidityContract.at('0xf1c23dae9cc5a8ec520ec095c13d57039fc89bc3');
+console.log(FirstSolidity.address);
        FirstSolidity.getDeveloper(function(error, result) {
            if (!error) {
                console.log(result);
-               $("#instructor").html(result[0]+' ('+result[2]+' years old)');
+			   $("#developer").html(result[0]+' ('+result[2]+' years old)');
+			   $("#owner").html(FirstSolidity.address);
+			   $("#name").val(result[0]);
+			   $("#age").val(result[2]);
+			   $("#position").val(result[1]);
+			   
            } else
                 console.log(error);
        });
 
        $("#button").click(function() {
-        FirstSolidity.setDeveloper($("#name").val(), "tester", $("#age").val());
-       });
+        	FirstSolidity.setDeveloper($("#name").val(), $("#position").val(), $("#age").val());
+	   });
+	   
+	   //solidity event
+	   var developerEvent = FirstSolidity.Developer();
+	   developerEvent.watch(function(error,result){
+		   console.log(result);
+		   if(!error){
+				$("#developer").html(result.args.name+' ('+result.args.age+' years old)');
+			   $("#owner").html(FirstSolidity.address);
+			   $("#name").val(result.args.name);
+			   $("#age").val(result.args.age);
+			   $("#position").val(result.args.position);
+		   }
+		   else{
+			   console.log(error);
+		   }
+
+	   });
 
     </script>
 
